@@ -4,6 +4,9 @@ using System.Collections;
 public class UnitController : MonoBehaviour
 {
 	[SerializeField] NavMeshAgent agent;
+	[SerializeField] bool goblinUnit;
+	[SerializeField] int laneNumber;
+	GameObject targetObject;
 	Transform target;
 	State currentState;
 	ObjectStats attackStats;
@@ -21,9 +24,23 @@ public class UnitController : MonoBehaviour
 
 	void Start()
 	{
-		var targetObject = GameObject.FindGameObjectWithTag("Finish");
-		target = targetObject.transform;
+		switch(laneNumber)
+		{
+		case 1:
+			targetObject = GameObject.FindGameObjectWithTag("Lane1");
+			break;
+		case 2:
+			targetObject = GameObject.FindGameObjectWithTag("Lane2");
+			break;
+		case 3:
+			targetObject = GameObject.FindGameObjectWithTag("Lane3");
+			break;
+		default:
+			Debug.LogError("No Lane Specified");
+			break;
+		}
 
+		target = targetObject.transform;
 		state = State.Travel;
 		StartCoroutine(TravelState());
 	}
@@ -55,8 +72,19 @@ public class UnitController : MonoBehaviour
 
 		while (state == State.Travel)
 		{
-			if (Vector3.Distance(transform.position, target.position) <= 1f)
-				state = State.Death;
+			if (Vector3.Distance(transform.position, target.position) <= 10f)
+			{
+				if (goblinUnit)
+				{
+					targetObject = GameObject.FindGameObjectWithTag("AllyGoal");
+				}
+				else
+					targetObject = GameObject.FindGameObjectWithTag("EnemyGoal");
+				
+				target = targetObject.transform;
+				agent.destination = target.position;
+				break;
+			}
 
 			yield return 0;
 		}
