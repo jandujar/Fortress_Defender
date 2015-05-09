@@ -7,6 +7,9 @@ public class CameraControl : MonoBehaviour
 	Vector3 panOrigin;
 	float panSpeed = 80f;
 	float zoomSpeed = 2f;
+	float clampPosX;
+	float clampPosY;
+	float clampPosZ;
 	bool movementRelease = true;
 
 	void OnEnable()
@@ -48,6 +51,28 @@ public class CameraControl : MonoBehaviour
 		{
 			Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition) - panOrigin;
 			transform.localPosition = new Vector3(oldPos.x + -pos.x * panSpeed, oldPos.y + -pos.y * panSpeed, transform.localPosition.z);
+
+			if (transform.localPosition.x < -32f)
+			{
+				clampPosX = -32f;
+				transform.localPosition = new Vector3(clampPosX, transform.localPosition.y, transform.localPosition.z);
+			}
+			else if (transform.localPosition.x > 32f)
+			{
+				clampPosX = 32f;
+				transform.localPosition = new Vector3(clampPosX, transform.localPosition.y, transform.localPosition.z);
+			}
+
+			if (transform.localPosition.y < -38f)
+			{
+				clampPosY = -38f;
+				transform.localPosition = new Vector3(transform.localPosition.x, clampPosY, transform.localPosition.z);
+			}
+			else if (transform.localPosition.y > 20f)
+			{
+				clampPosY = 20f;
+				transform.localPosition = new Vector3(transform.localPosition.x, clampPosY, transform.localPosition.z);
+			}
 		}
 	}
 
@@ -57,6 +82,17 @@ public class CameraControl : MonoBehaviour
 		movementRelease = false;
 		float zoom = (Time.deltaTime * gesture.deltaPinch) * zoomSpeed;
 		transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + zoom);
+
+		if (transform.localPosition.z > -25f)
+		{
+			clampPosZ = -25f;
+			transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, clampPosZ);
+		}
+		else if (transform.localPosition.z < -60f)
+		{
+			clampPosZ = -60f;
+			transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, clampPosZ);
+		}
 	}
 
 	void On_PinchEnd (Gesture gesture)
