@@ -13,15 +13,17 @@ public class Spawner : MonoBehaviour
 
 	IEnumerator InitialSpawnWait()
 	{
-		yield return new WaitForSeconds(5f);
+		float initialSpawnWait = Random.Range(1f, 6f);
+		yield return new WaitForSeconds(initialSpawnWait);
 		StartCoroutine(SpawnUnit());
 	}
 
 	IEnumerator SpawnUnit()
 	{
 		int i = 0;
+		int randomSpawnNumber = Random.Range(2, 5);
 
-		while (i < 4)
+		while (i < randomSpawnNumber)
 		{
 			float randomX = Random.Range(transform.position.x - 1f, transform.position.x + 1f);
 			float randomZ = Random.Range(transform.position.z - 1f, transform.position.z + 1f);
@@ -29,10 +31,12 @@ public class Spawner : MonoBehaviour
 			clone.name = "Unit_" + unitNumber;
 			unitNumber++;
 			i++;
-			yield return new WaitForSeconds(0.5f);
+			float randomSpawnWait = Random.Range(0.4f, 0.6f);
+			yield return new WaitForSeconds(randomSpawnWait);
 		}
 
-		yield return new WaitForSeconds(10f);
+		float randomWait = Random.Range(8f, 12f);
+		yield return new WaitForSeconds(randomWait);
 		StartCoroutine(SpawnUnit());
 	}
 }
