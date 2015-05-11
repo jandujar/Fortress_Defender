@@ -93,8 +93,14 @@ public class UnitController : MonoBehaviour
 	IEnumerator AttackState()
 	{
 		agent.destination = transform.position;
-		attackStats = AttackObject.GetComponent<ObjectStats>();
-		InvokeRepeating("Attack", 0f, 1f);
+
+		if (AttackObject != null)
+		{
+			attackStats = AttackObject.GetComponent<ObjectStats>();
+			InvokeRepeating("Attack", 0f, 1f);
+		}
+		else
+			state = State.Travel;
 
 		while (state == State.Attack)
 		{

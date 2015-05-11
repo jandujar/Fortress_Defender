@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
 	IEnumerator SpawnUnit()
 	{
 		int i = 0;
-		int randomSpawnNumber = Random.Range(2, 5);
+		int randomSpawnNumber = Random.Range(1, 5);
 
 		while (i < randomSpawnNumber)
 		{
